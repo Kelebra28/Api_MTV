@@ -219,7 +219,7 @@ app.delete('/api/team/:id/', (req, res) => {
 
 
 // use port 3000 unless there exists a preconfigured port
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
