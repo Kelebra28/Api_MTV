@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
-const {Player,Equipo} = require('./clienteMongo.js');
+const {Vendedor, Producto} = require('./clienteMongo.js');
 const app = express();
 
 
@@ -13,40 +13,41 @@ app.use(bodyParser.json());
 
 
 
-// CRUD PLAYERS LoL
+// CRUD  Vendedor
 
 // CREATE
-app.post('/api/player', (request, response) => {
+app.post('/api/vendedor', (request, response) => {
     let jsonCliente = request.body;
 
     
-    const nuevoPlayer = Player(jsonCliente);
+    const nuevoVendedor = Vendedor(jsonCliente);
 
-    nuevoPlayer
-        .save((error, player)=>{
+    nuevoVendedor
+        .save((error, vendedor)=>{
             response
                 .status(201)
                 .send({
-                    "menssage": "Jugador creado exitosamente",
-                    "body": player,
+                    "menssage": "Vendedor creado exitosamente",
+                    "body": vendedor,
                     "error": error
                 })
         })
+       // .catch (error => console.log(error))
 });
 
 // READ
-app.get('/api/player', (request, response) => {
+app.get('/api/vendedor', (request, response) => {
 
-    Player
+    Vendedor
     .find()
-    .populate('Equipo')
+    .populate('Productos')
     .exec()
     .then( jsonResultado => {
         response
             .status(200)
             .send({
-                "message": "Miembros del equipo exitosa.",
-                "body": jsonResultado
+                "message": "Producto eliminado exitosamente",
+                "body": jsonResultado 
         });
     })
     .catch( error => console.log(error));
@@ -54,15 +55,15 @@ app.get('/api/player', (request, response) => {
 });
 
 // READ
-app.get('/api/player/:id', (req, res)=>{
-    const playerId = req.params.id;
+app.get('/api/vendedor/:id', (req, res)=>{
+    const vendedorId = req.params.id;
 
-    Player
-        .findById(playerId)
-        .populate('')
+    Vendedor
+        .findById(vendedorId)
+        .populate('Productos')
         .exec()
-        .then( player => {
-            res.status(200).send(player);
+        .then( vendedor => {
+            res.status(200).send(vendedor);
         })
         .catch( error => {
             res.status(404).send(error);
@@ -70,19 +71,19 @@ app.get('/api/player/:id', (req, res)=>{
 });
 
 // UPDATE
-app.put('/api/player/:id', (req, res)=>{
-    const playerId = req.params.id;
+app.put('/api/vendedor/:id', (req, res)=>{
+    const vendedorId = req.params.id;
 
-    Player 
+    Vendedor 
         .findByIdAndUpdate(
-            playerId,
+            vendedorId,
             {$set: req.body},
             {new: true}
         )
-        .populate('cursos')
+        .populate('productos')
         .exec()
-        .then( playerActualizado => {
-            res.status(200).send(playerActualizado);
+        .then( vendedorActualizado => {
+            res.status(200).send(vendedorActualizado);
         })
         .catch( error => {
             res.status(400).send(`Error: ${error}`);
@@ -90,15 +91,15 @@ app.put('/api/player/:id', (req, res)=>{
 });
 
 // DELLETE
-app.delete('/api/player/:id', (req, res)=>{
-    const PlayerId = req.params.id;
+app.delete('/api/vendedor/:id', (req, res)=>{
+    const VendedorId = req.params.id;
 
-    Player
-        .findByIdAndRemove(PlayerId)
+    Vendedor
+        .findByIdAndRemove(VendedorId)
         .exec()
         .then( resultado => {
             res.status(204).send({
-                "message": "Player eliminado exitosamente",
+                "message": "Vendedor eliminado exitosamente",
                 "body": resultado
             })
         })
@@ -114,35 +115,35 @@ app.delete('/api/player/:id', (req, res)=>{
 
 
 
-// -------------- CRUD Cursos --------------
+// -------------- CRUD Productos --------------
 
 // CREATE  ->  Post One
-app.post('/api/team', (request, response) => {
+app.post('/api/productos', (request, response) => {
     let json = request.body;
 
-    const equipoNuevo = Equipo(json);
+    const productoNuevo = Producto(json);
 
-    equipoNuevo
-        .save( (error, equipo) => {
+    productoNuevo
+        .save( (error, producto) => {
             response
                 .status(201)
                 .send({
-                    "menssage": "Curso creado exitosamente",
-                    "body": equipo
+                    "menssage": "Producto creado exitosamente",
+                    "body": producto
                 });
         })
 });
 
 // READ    ->  Get All
-app.get('/api/team', (request, response) => {
+app.get('/api/productos', (request, response) => {
 
-    Equipo
+    Producto
         .find()
         .exec()
-        .then( equipo => {
+        .then( producto => {
             response.status(200).send({
-                "message": "Lista de cursos obtenida exitosamente",
-                "body": equipo
+                "message": "Lista de productos obtenida exitosamente",
+                "body": producto
             });
         })
         .catch( error => {
@@ -152,18 +153,18 @@ app.get('/api/team', (request, response) => {
 
 
 // READ    ->  Get One
-app.get('/api/team/:id/', (req, res) => {
-    const equipoId = req.params.id;
+app.get('/api/productos/:id/', (req, res) => {
+    const productoId = req.params.id;
 
-    Equipo
-        .findById(equipoId)
+    Producto
+        .findById(productoId)
         .exec()
-        .then( equipo => {
+        .then( producto => {
             res
               .status(200)
               .send({
-                message: "Curso hallado exitosamente",
-                body: equipo
+                message: "Prodcuto hallado exitosamente",
+                body: producto
               });
         })
         .catch( error => {
@@ -172,18 +173,18 @@ app.get('/api/team/:id/', (req, res) => {
 });
 
 // UPDATE  ->  Put One
-app.put('/api/team/:id/', (req, res) => {
-    const equipoId = req.params.id;
+app.put('/api/productos/:id/', (req, res) => {
+    const productoId = req.params.id;
 
-    Equipo
+    Producto
         .findByIdAndUpdate(
-            equipoId,
+            productoId,
             { $set: req.body },
             { new: true }
         )
         .exec()
-        .then(equipoActualizado => {
-            res.status(200).send(equipoActualizado);
+        .then(productoActualizado => {
+            res.status(200).send(productoActualizado);
         })
         .catch(error => {
             res.status(400).send(`Error: ${error}`);
@@ -191,15 +192,15 @@ app.put('/api/team/:id/', (req, res) => {
 });
 
 // DELLETE ->  Delete One
-app.delete('/api/team/:id/', (req, res) => {
-    const equipoId = req.params.id;
+app.delete('/api/productos/:id/', (req, res) => {
+    const productoId = req.params.id;
 
-    Equipo
-        .findByIdAndRemove(equipoId)
+    Producto
+        .findByIdAndRemove(productoId)
         .exec()
         .then(resultado => {
             res.status(204).send({
-                "message": "Equipo eliminado exitosamente",
+                "message": "Producto eliminado exitosamente",
                 "body": resultado
             })
         })
@@ -219,9 +220,9 @@ app.delete('/api/team/:id/', (req, res) => {
 
 
 // use port 3000 unless there exists a preconfigured port
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+    console.log(`Servidor corriendo en el puerto ${PORT} , CRACK!`);
 });
 

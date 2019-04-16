@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url = 'mongodb://kelebra28:abcd1234@ds121373.mlab.com:21373/loldex';
+const url = 'mongodb://ricardo:abc123@ds239936.mlab.com:39936/montev';
 
 mongoose.connect(
   url,
@@ -13,32 +13,27 @@ mongoose.connect(
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Schema.ObjectId;
 
-const equipoSchema = Schema({
-  equipo: ObjectId,
-  nombres: String,
-  
+const productoSchema = Schema({
+  producto: ObjectId,
+  nombre: String,
+  descripccion: String,  
   foto_url: String
 
 });
+ // marca: {type: Schema.ObjectId, ref: 'Equipo' },
 
-
-const playerSchema = Schema({
-  player: ObjectId,
+const vendedorSchema = Schema({
+  Vendedor: ObjectId,
   nombres: String,
-  equipo: {type: Schema.ObjectId, ref: 'Equipo' },
-  edad: {type: Number},
-  sexo: String,
   rol: String,
-  campeones: String,
-  mundiales: {type: Number},
   foto_url: String
 
 });
 
 
 
-const Player = mongoose.model('Player', playerSchema);
-const Equipo = mongoose.model('Equipo', equipoSchema);
+const Vendedor = mongoose.model('Vendedor', vendedorSchema);
+const Producto = mongoose.model('Producto', productoSchema);
 
 
-module.exports = {Player,Equipo};
+module.exports = {Vendedor, Producto};

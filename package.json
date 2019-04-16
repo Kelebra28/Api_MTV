@@ -1,13 +1,13 @@
 {
   "name": "api-loldex",
   "version": "1.0.0",
-  "description": "Api-loldex proyecto",
+  "description": "Bazzar MTV",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "Kelebra",
+  "author": "Ricardo",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
